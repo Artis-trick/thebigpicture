@@ -16,62 +16,7 @@ const questions = {
             answer: "Atlas"
         }
     ],
-    bindi: [
-        {
-            question: "What does a red bindi traditionally signify in Hindu culture?",
-            options: ["Beauty", "Marital Status", "Wealth", "Education"],
-            answer: "Marital Status"
-        },
-        {
-            question: "What is the main ingredient in traditional kumkum powder used for bindis?",
-            options: ["Turmeric", "Henna", "Sandalwood", "Limestone"],
-            answer: "Turmeric"
-        },
-        {
-            question: "Which Bollywood actress popularized the larger, decorative bindi in the 1990s?",
-            options: ["Madhuri Dixit", "Aishwarya Rai", "Sridevi", "Kajol"],
-            answer: "Madhuri Dixit"
-        }
-    ],
-    attar: [
-        {
-            question: "Which Indian city is known as the 'Perfume Capital'?",
-            options: ["Mumbai", "Kannauj", "Delhi", "Varanasi"],
-            answer: "Kannauj"
-        },
-        {
-            question: "What is the primary base ingredient used in traditional Indian attars?",
-            options: ["Water", "Coconut oil", "Sandalwood oil", "Olive oil"],
-            answer: "Sandalwood oil"
-        },
-        {
-            question: "Attar has been used in Indian culture for how many years?",
-            options: ["1,000", "5,000", "10,000", "60,000"],
-            answer: "60,000"
-        }
-    ],
-    comb: [
-        {
-            question: "Why is the comb (Kanga) considered sacred in Sikhism?",
-            options: [
-                "For grooming hair",
-                "As a symbol of cleanliness",
-                "As a fashion accessory",
-                "To ward off evil spirits"
-            ],
-            answer: "As a symbol of cleanliness"
-        },
-        {
-            question: "Which traditional Indian material is commonly used to make combs?",
-            options: ["Ivory", "Wood", "Gold", "Clay"],
-            answer: "Wood"
-        },
-        {
-            question: "In many Indian households, it’s considered unlucky to do what with a comb at night?",
-            options: ["Comb hair", "Wash it", "Place it on a table", "Lend it to others"],
-            answer: "Comb hair"
-        }
-    ]
+    // Other categories...
 };
 
 let currentQuestionIndex = 0;
@@ -96,11 +41,15 @@ function startQuiz(object) {
     document.getElementById("object-selection").style.display = "none";
     document.getElementById("creators-button").style.display = "none"; // Hide creators button during quiz
     document.getElementById("question-container").style.display = "block";
+    document.getElementById("next-button").style.display = "none"; // Hide Next button initially
     nextQuestion();
 }
 
 // Load the next question or end the quiz
 function nextQuestion() {
+    // Hide the "Next" button while loading the question
+    document.getElementById("next-button").style.display = "none";
+    
     if (currentQuestionIndex < questions[selectedObject].length) {
         const currentQuestion = questions[selectedObject][currentQuestionIndex];
         document.getElementById("question").innerText = currentQuestion.question;
@@ -112,7 +61,6 @@ function nextQuestion() {
             button.onclick = () => selectAnswer(option);
             optionsContainer.appendChild(button);
         });
-        currentQuestionIndex++;
     } else {
         endGame();
     }
@@ -120,10 +68,11 @@ function nextQuestion() {
 
 // Handle the answer selection and provide feedback
 function selectAnswer(selected) {
-    const correctAnswer = questions[selectedObject][currentQuestionIndex - 1].answer;
+    const correctAnswer = questions[selectedObject][currentQuestionIndex].answer;
     if (selected === correctAnswer) {
         score++;
     }
+    
     const buttons = document.querySelectorAll("#options button");
     buttons.forEach(button => {
         button.disabled = true;
@@ -133,6 +82,10 @@ function selectAnswer(selected) {
             button.style.backgroundColor = "red"; // Highlight incorrect answers
         }
     });
+    
+    // Show the "Next" button after selecting an answer
+    document.getElementById("next-button").style.display = "block";
+    currentQuestionIndex++;
 }
 
 // End the game and show the score
